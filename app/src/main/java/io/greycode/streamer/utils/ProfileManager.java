@@ -90,6 +90,14 @@ public class ProfileManager {
         prefs.edit().putBoolean(KEY_RECORD_LOCAL, record).apply();
     }
 
+    public boolean isRecordWithoutOverlays() {
+        return prefs.getBoolean("record_without_overlays", false);
+    }
+
+    public void setRecordWithoutOverlays(boolean withoutOverlays) {
+        prefs.edit().putBoolean("record_without_overlays", withoutOverlays).apply();
+    }
+
     public boolean isAdaptiveBitrateEnabled() {
         return prefs.getBoolean("adaptive_bitrate", true);
     }

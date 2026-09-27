@@ -123,24 +123,24 @@ public class AddOverlayBottomSheet extends BottomSheetDialogFragment {
             binding.etOverlayText.setText(itemToEdit.getText());
             binding.etHtmlUrlOrCode.setText(itemToEdit.getHtmlUrlOrCode());
 
-            float safeScale = Math.max(0.5f, Math.min(3.0f, itemToEdit.getScale()));
+            float safeScale = snapToStep(itemToEdit.getScale(), 0.5f, 3.0f, 0.1f);
             binding.sliderScale.setValue(safeScale);
 
-            float safeSpeed = Math.max(1.0f, Math.min(20.0f, itemToEdit.getScrollSpeed()));
+            float safeSpeed = snapToStep(itemToEdit.getScrollSpeed(), 1.0f, 20.0f, 1.0f);
             binding.sliderSpeed.setValue(safeSpeed);
 
-            float safeLayerAlpha = Math.max(0.05f, Math.min(1.0f, itemToEdit.getAlpha()));
+            float safeLayerAlpha = snapToStep(itemToEdit.getAlpha(), 0.05f, 1.0f, 0.05f);
             binding.sliderLayerAlpha.setValue(safeLayerAlpha);
 
-            float safeBgAlpha = Math.max(0.0f, Math.min(1.0f, itemToEdit.getBgAlpha()));
+            float safeBgAlpha = snapToStep(itemToEdit.getBgAlpha(), 0.0f, 1.0f, 0.05f);
             binding.sliderBgAlpha.setValue(safeBgAlpha);
 
             selectedLogoPath = itemToEdit.getImagePath();
             binding.switchHtmlFullPage.setChecked(itemToEdit.isHtmlFullPage());
-            binding.sliderCropLeft.setValue(Math.max(0f, Math.min(0.45f, itemToEdit.getCropLeftPercent())));
-            binding.sliderCropRight.setValue(Math.max(0f, Math.min(0.45f, itemToEdit.getCropRightPercent())));
-            binding.sliderCropTop.setValue(Math.max(0f, Math.min(0.45f, itemToEdit.getCropTopPercent())));
-            binding.sliderCropBottom.setValue(Math.max(0f, Math.min(0.45f, itemToEdit.getCropBottomPercent())));
+            binding.sliderCropLeft.setValue(snapToStep(itemToEdit.getCropLeftPercent(), 0f, 0.45f, 0.01f));
+            binding.sliderCropRight.setValue(snapToStep(itemToEdit.getCropRightPercent(), 0f, 0.45f, 0.01f));
+            binding.sliderCropTop.setValue(snapToStep(itemToEdit.getCropTopPercent(), 0f, 0.45f, 0.01f));
+            binding.sliderCropBottom.setValue(snapToStep(itemToEdit.getCropBottomPercent(), 0f, 0.45f, 0.01f));
 
             switch (selectedType) {
                 case SCROLLING_TEXT: binding.chipMarquee.setChecked(true); break;
@@ -405,6 +405,14 @@ public class AddOverlayBottomSheet extends BottomSheetDialogFragment {
                 binding.layoutTextColorSection.setVisibility(View.GONE);
                 break;
         }
+    }
+
+    private float snapToStep(float value, float valueFrom, float valueTo, float stepSize) {
+        float clamped = Math.max(valueFrom, Math.min(valueTo, value));
+        if (stepSize <= 0f) return clamped;
+        float steps = Math.round((clamped - valueFrom) / stepSize);
+        float snapped = valueFrom + (steps * stepSize);
+        return Math.max(valueFrom, Math.min(valueTo, snapped));
     }
 
     @Override

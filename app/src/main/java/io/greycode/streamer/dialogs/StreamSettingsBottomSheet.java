@@ -60,6 +60,11 @@ public class StreamSettingsBottomSheet extends BottomSheetDialogFragment {
         binding.sliderBitrate.setValue((float) profileManager.getBitrateKbps());
         binding.sliderGop.setValue((float) profileManager.getKeyframeInterval());
         binding.switchRecord.setChecked(profileManager.isRecordLocal());
+        binding.switchRecordWithoutOverlays.setChecked(profileManager.isRecordWithoutOverlays());
+        binding.switchRecordWithoutOverlays.setVisibility(profileManager.isRecordLocal() ? View.VISIBLE : View.GONE);
+        binding.switchRecord.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            binding.switchRecordWithoutOverlays.setVisibility(isChecked ? View.VISIBLE : View.GONE);
+        });
         binding.switchAdaptiveBitrate.setChecked(profileManager.isAdaptiveBitrateEnabled());
 
         updateBitrateLabel(profileManager.getBitrateKbps());
@@ -262,6 +267,7 @@ public class StreamSettingsBottomSheet extends BottomSheetDialogFragment {
 
             // Always allow updating Local Record and Audio Gain!
             profileManager.setRecordLocal(binding.switchRecord.isChecked());
+            profileManager.setRecordWithoutOverlays(binding.switchRecordWithoutOverlays.isChecked());
             profileManager.setAudioGain(binding.sliderAudioGain.getValue() / 100f);
 
             Toast.makeText(getContext(), "Stream configuration saved successfully!", Toast.LENGTH_SHORT).show();

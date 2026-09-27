@@ -502,6 +502,17 @@
                 android:text="@string/record_local"
                 android:textColor="@color/white"
                 android:textSize="14sp" />
+
+            <com.google.android.material.materialswitch.MaterialSwitch
+                android:id="@+id/switchRecordWithoutOverlays"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:layout_marginStart="16dp"
+                android:text="Record Clean Video (Without Overlays)"
+                android:textColor="#DDFFFFFF"
+                android:textSize="13sp"
+                android:visibility="gone" />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 

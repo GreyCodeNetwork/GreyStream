@@ -348,13 +348,98 @@ public class MainActivity extends AppCompatActivity implements StreamManager.Str
         boolean isAdaptiveBitrate = profileManager.isAdaptiveBitrateEnabled();
 
         if (streamManager.prepareStream(resW, resH, fps, bitrateKbps, gop, audioSource, isAdaptiveBitrate)) {
+            streamManager.setRecordWithoutOverlays(profileManager.isRecordWithoutOverlays());
+            if (profileManager.isRecordLocal()) {
+                currentRecordFilePath = getRecordFilePath();
+                streamManager.startRecord(currentRecordFilePath);
+            }
             streamManager.startStream(fullUrl);
         } else {
             onConnectionFailed("Encoder preparation failed (" + resW + "x" + resH + " @ " + bitrateKbps + " Kbps).");
         }
     }
 
+    private String currentRecordFilePath = null;
+
+    private String getRecordFilePath() {
+        java.io.File recordDir = getExternalFilesDir(android.os.Environment.DIRECTORY_MOVIES);
+        if (recordDir == null) {
+            recordDir = getFilesDir();
+        }
+        if (!recordDir.exists()) {
+            recordDir.mkdirs();
+        }
+        String fileName = "GreyStream_" + new java.text.SimpleDateFormat("yyyyMMdd_HHmmss", java.util.Locale.US).format(new java.util.Date()) + ".mp4";
+        java.io.File recordFile = new java.io.File(recordDir, fileName);
+        return recordFile.getAbsolutePath();
+    }
+
+    private void finishRecordingAndSave() {
+        if (streamManager != null && streamManager.isRecording()) {
+            streamManager.stopRecord();
+        }
+        if (currentRecordFilePath != null) {
+            String tempPath = currentRecordFilePath;
+            currentRecordFilePath = null;
+            saveRecordedVideoToMediaStore(tempPath);
+        }
+    }
+
+    private void saveRecordedVideoToMediaStore(String filePath) {
+        if (filePath == null) return;
+        java.io.File file = new java.io.File(filePath);
+        if (!file.exists() || file.length() == 0) return;
+
+        new Thread(() -> {
+            try {
+                String fileName = file.getName();
+                android.content.ContentValues values = new android.content.ContentValues();
+                values.put(android.provider.MediaStore.Video.Media.DISPLAY_NAME, fileName);
+                values.put(android.provider.MediaStore.Video.Media.MIME_TYPE, "video/mp4");
+
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+                    values.put(android.provider.MediaStore.Video.Media.RELATIVE_PATH, "Movies/GreyStream");
+                    values.put(android.provider.MediaStore.Video.Media.IS_PENDING, 1);
+                } else {
+                    java.io.File moviesDir = new java.io.File(android.os.Environment.getExternalStoragePublicDirectory(android.os.Environment.DIRECTORY_MOVIES), "GreyStream");
+                    if (!moviesDir.exists()) moviesDir.mkdirs();
+                    java.io.File destFile = new java.io.File(moviesDir, fileName);
+                    values.put(android.provider.MediaStore.Video.Media.DATA, destFile.getAbsolutePath());
+                }
+
+                android.net.Uri uri = getContentResolver().insert(android.provider.MediaStore.Video.Media.EXTERNAL_CONTENT_URI, values);
+                if (uri != null) {
+                    try (java.io.OutputStream out = getContentResolver().openOutputStream(uri);
+                         java.io.FileInputStream in = new java.io.FileInputStream(file)) {
+                        byte[] buffer = new byte[16384];
+                        int bytesRead;
+                        while ((bytesRead = in.read(buffer)) != -1) {
+                            out.write(buffer, 0, bytesRead);
+                        }
+                    }
+
+                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+                        values.clear();
+                        values.put(android.provider.MediaStore.Video.Media.IS_PENDING, 0);
+                        getContentResolver().update(uri, values, null, null);
+                    } else {
+                        android.media.MediaScannerConnection.scanFile(MainActivity.this, new String[]{file.getAbsolutePath()}, null, null);
+                    }
+
+                    // Delete temp file after successful export to MediaStore
+                    file.delete();
+
+                    runOnUiThread(() -> Toast.makeText(MainActivity.this, "Recording saved to Movies/GreyStream", Toast.LENGTH_SHORT).show());
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                runOnUiThread(() -> Toast.makeText(MainActivity.this, "Failed to export recording: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+            }
+        }).start();
+    }
+
     private void stopStreamProcess() {
+        finishRecordingAndSave();
         if (streamManager != null) {
             streamManager.stopStream();
         }
@@ -517,7 +602,15 @@ public class MainActivity extends AppCompatActivity implements StreamManager.Str
         binding.btnGoLive.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#555555")));
         binding.btnGoLive.setEnabled(true);
 
-        Toast.makeText(this, "Broadcasting Live to Server!", Toast.LENGTH_SHORT).show();
+        if (profileManager != null && profileManager.isRecordLocal()) {
+            if (profileManager.isRecordWithoutOverlays()) {
+                Toast.makeText(this, "Broadcasting Live & Recording Clean Video (No Overlays)!", Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(this, "Broadcasting Live & Recording locally to Movies/GreyStream!", Toast.LENGTH_LONG).show();
+            }
+        } else {
+            Toast.makeText(this, "Broadcasting Live to Server!", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
@@ -544,6 +637,7 @@ public class MainActivity extends AppCompatActivity implements StreamManager.Str
 
             retryHandler.postDelayed(retryRunnable, 3000);
         } else {
+            finishRecordingAndSave();
             cancelAutoRetry();
             resetGoLiveButtonState();
             binding.tvStatusBadge.setText(R.string.status_offline);
@@ -568,6 +662,7 @@ public class MainActivity extends AppCompatActivity implements StreamManager.Str
         }
 
         if (wasStreaming) {
+            finishRecordingAndSave();
             cancelAutoRetry();
             resetGoLiveButtonState();
 

@@ -494,6 +494,9 @@ public class StreamManager implements ConnectChecker {
     public void stopStream() {
         if (rtmpCamera2 != null) {
             try {
+                if (rtmpCamera2.isRecording()) {
+                    rtmpCamera2.stopRecord();
+                }
                 rtmpCamera2.stopStream();
             } catch (Exception e) {
                 e.printStackTrace();
@@ -507,6 +510,95 @@ public class StreamManager implements ConnectChecker {
             }
         }
         isStreaming = false;
+        isRecording = false;
+        updateOverlayState();
+    }
+
+    private boolean recordWithoutOverlays = false;
+
+    public void setRecordWithoutOverlays(boolean recordWithoutOverlays) {
+        this.recordWithoutOverlays = recordWithoutOverlays;
+        updateOverlayState();
+    }
+
+    public boolean isRecordWithoutOverlays() {
+        return recordWithoutOverlays;
+    }
+
+    private void updateOverlayState() {
+        if (imageObjectFilterRender instanceof io.greycode.streamer.overlay.CustomImageObjectFilterRender) {
+            io.greycode.streamer.overlay.CustomImageObjectFilterRender customFilter = 
+                (io.greycode.streamer.overlay.CustomImageObjectFilterRender) imageObjectFilterRender;
+            customFilter.setRecordWithoutOverlays(recordWithoutOverlays);
+            customFilter.setRecording(isRecording);
+            if (isRecording && recordWithoutOverlays) {
+                setupCleanRecordingHook();
+            }
+        }
+    }
+
+    private void setupCleanRecordingHook() {
+        if (!recordWithoutOverlays || !isRecording || rtmpCamera2 == null) return;
+        try {
+            Object glInterface = rtmpCamera2.getGlInterface();
+            if (glInterface == null) return;
+
+            java.lang.reflect.Field mainRenderField = glInterface.getClass().getDeclaredField("mainRender");
+            mainRenderField.setAccessible(true);
+            Object mainRender = mainRenderField.get(glInterface);
+
+            java.lang.reflect.Field cameraRenderField = mainRender.getClass().getDeclaredField("cameraRender");
+            cameraRenderField.setAccessible(true);
+            Object cameraRender = cameraRenderField.get(mainRender);
+
+            java.lang.reflect.Field encoderListField = glInterface.getClass().getDeclaredField("surfaceManagerEncoder");
+            encoderListField.setAccessible(true);
+            java.util.List<?> encoderList = (java.util.List<?>) encoderListField.get(glInterface);
+
+            if (encoderList != null && encoderList.size() >= 2) {
+                Object recordSurfaceManager = encoderList.get(1);
+                java.lang.reflect.Method getEglSurfaceMethod = recordSurfaceManager.getClass().getMethod("getEglSurface");
+                android.opengl.EGLSurface recordEglSurface = (android.opengl.EGLSurface) getEglSurfaceMethod.invoke(recordSurfaceManager);
+
+                if (imageObjectFilterRender instanceof io.greycode.streamer.overlay.CustomImageObjectFilterRender) {
+                    ((io.greycode.streamer.overlay.CustomImageObjectFilterRender) imageObjectFilterRender)
+                        .configureCleanRecordHook(mainRender, cameraRender, recordEglSurface, true);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void startRecord(String filePath) {
+        if (rtmpCamera2 == null) return;
+        try {
+            if (!rtmpCamera2.isRecording()) {
+                rtmpCamera2.startRecord(filePath);
+                isRecording = true;
+                updateOverlayState();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void stopRecord() {
+        if (rtmpCamera2 != null) {
+            try {
+                if (rtmpCamera2.isRecording()) {
+                    rtmpCamera2.stopRecord();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        isRecording = false;
+        updateOverlayState();
+    }
+
+    public boolean isRecording() {
+        return rtmpCamera2 != null && rtmpCamera2.isRecording();
     }
 
     public void switchCamera() {
