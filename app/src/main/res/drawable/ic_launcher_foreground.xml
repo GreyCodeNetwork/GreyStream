@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Broadcast Signal Waves -->
+    <path
+        android:pathData="M 38,34 A 24,24 0 0,0 38,74"
+        android:strokeColor="#00E5FF"
+        android:strokeWidth="3.5"
+        android:strokeLineCap="round"
+        android:fillColor="#00000000" />
+
+    <path
+        android:pathData="M 70,34 A 24,24 0 0,1 70,74"
+        android:strokeColor="#00E5FF"
+        android:strokeWidth="3.5"
+        android:strokeLineCap="round"
+        android:fillColor="#00000000" />
+
+    <path
+        android:pathData="M 32,27 A 34,34 0 0,0 32,81"
+        android:strokeColor="#00E5FF"
+        android:strokeWidth="2.5"
+        android:strokeAlpha="0.6"
+        android:strokeLineCap="round"
+        android:fillColor="#00000000" />
+
+    <path
+        android:pathData="M 76,27 A 34,34 0 0,1 76,81"
+        android:strokeColor="#00E5FF"
+        android:strokeWidth="2.5"
+        android:strokeAlpha="0.6"
+        android:strokeLineCap="round"
+        android:fillColor="#00000000" />
+
+    <!-- Central Camera Body -->
+    <path
+        android:pathData="M 43,44 L 59,44 A 4,4 0 0,1 63,48 L 63,60 A 4,4 0 0,1 59,64 L 43,64 A 4,4 0 0,1 39,60 L 39,48 A 4,4 0 0,1 43,44 Z"
+        android:fillColor="#FFFFFF" />
+
+    <!-- Camera Lens Cone -->
+    <path
+        android:pathData="M 63,50 L 71,45 L 71,63 L 63,58 Z"
+        android:fillColor="#00E5FF" />
+
+    <!-- Red Live Record Indicator Dot -->
+    <path
+        android:pathData="M 45,49 A 2.5,2.5 0 1,1 44.9,49 Z"
+        android:fillColor="#FF3B30" />
+</vector>

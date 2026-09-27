@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/Widget.GreyStream.Card"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="8dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="12dp">
+
+        <!-- Drag Handle Icon -->
+        <ImageView
+            android:id="@+id/ivDragHandle"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_marginEnd="8dp"
+            android:contentDescription="Drag &amp; Drop to Reorder"
+            android:src="@drawable/ic_drag_handle"
+            app:tint="@color/md_theme_dark_onSurfaceVariant" />
+
+        <!-- Type Icon -->
+        <ImageView
+            android:id="@+id/ivTypeIcon"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:contentDescription="Overlay Type"
+            android:src="@drawable/ic_layers"
+            app:tint="@color/md_theme_dark_primary" />
+
+        <!-- Overlay Details -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvOverlayTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:fontFamily="sans-serif-medium"
+                android:maxLines="1"
+                android:text="Marquee Text"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/tvOverlaySubtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="Welcome to GreyStream"
+                android:textColor="@color/md_theme_dark_onSurfaceVariant"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <!-- Move Layer Up (Bring Forward) -->
+        <ImageButton
+            android:id="@+id/btnMoveUp"
+            style="@style/Widget.Material3.Button.IconButton"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:contentDescription="Move Layer Up"
+            android:src="@drawable/ic_arrow_up"
+            app:tint="@color/white" />
+
+        <!-- Move Layer Down (Send Backward) -->
+        <ImageButton
+            android:id="@+id/btnMoveDown"
+            style="@style/Widget.Material3.Button.IconButton"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:contentDescription="Move Layer Down"
+            android:src="@drawable/ic_arrow_down"
+            app:tint="@color/white" />
+
+        <!-- Edit Overlay -->
+        <ImageButton
+            android:id="@+id/btnEdit"
+            style="@style/Widget.Material3.Button.IconButton"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:contentDescription="Edit Overlay"
+            android:src="@drawable/ic_edit"
+            app:tint="@color/white" />
+
+        <!-- Visibility Toggle -->
+        <ImageButton
+            android:id="@+id/btnToggleVisibility"
+            style="@style/Widget.Material3.Button.IconButton"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:contentDescription="Toggle Visibility"
+            android:src="@drawable/ic_visible"
+            app:tint="@color/white" />
+
+        <!-- Delete Overlay Button -->
+        <ImageButton
+            android:id="@+id/btnDelete"
+            style="@style/Widget.Material3.Button.IconButton"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:contentDescription="Delete Overlay"
+            android:src="@drawable/ic_delete"
+            app:tint="@color/stream_live_red" />
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

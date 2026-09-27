@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">GreyStream</string>
+    <string name="app_package">io.greycode.streamer</string>
+
+    <!-- Header & Status -->
+    <string name="status_offline">OFFLINE</string>
+    <string name="status_connecting">CONNECTING...</string>
+    <string name="status_live">LIVE</string>
+    <string name="status_recording">REC</string>
+    <string name="go_live">GO LIVE</string>
+    <string name="stop_stream">STOP STREAM</string>
+
+    <!-- Navigation & Bottom Sheets -->
+    <string name="tab_overlays">Overlays</string>
+    <string name="tab_settings">Settings</string>
+    <string name="tab_profiles">Profiles</string>
+
+    <!-- Overlay Types -->
+    <string name="overlay_logo">Logo / Image</string>
+    <string name="overlay_marquee">Scrolling Marquee</string>
+    <string name="overlay_banner">Lower-Third Banner</string>
+    <string name="overlay_watermark">Watermark</string>
+    <string name="overlay_clock">Live Clock</string>
+
+    <!-- Settings Dialog -->
+    <string name="stream_settings_title">Stream Configuration</string>
+    <string name="server_url">RTMP / RTMPS / HLS Server URL</string>
+    <string name="stream_key">Stream Key</string>
+    <string name="resolution">Resolution</string>
+    <string name="video_bitrate">Video Bitrate (Kbps)</string>
+    <string name="fps">FPS</string>
+    <string name="record_local">Record to Local Storage</string>
+    <string name="save_settings">Save Settings</string>
+
+    <!-- Actions -->
+    <string name="add_overlay">Add Overlay</string>
+    <string name="edit_overlay">Edit Overlay</string>
+    <string name="lock_layout">Lock Layout</string>
+    <string name="unlock_layout">Unlock Layout</string>
+
+    <!-- Default Preset Names -->
+    <string name="preset_youtube">YouTube Live</string>
+    <string name="preset_twitch">Twitch</string>
+    <string name="preset_facebook">Facebook Live</string>
+    <string name="preset_custom">Custom RTMP/S</string>
+</resources>

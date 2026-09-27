@@ -1,0 +1,634 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/md_theme_dark_surface"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <!-- Drag Handle -->
+    <View
+        android:layout_width="32dp"
+        android:layout_height="4dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="12dp"
+        android:background="#44FFFFFF" />
+
+    <!-- Title Header -->
+    <TextView
+        android:id="@+id/tvSheetTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        android:fontFamily="sans-serif-medium"
+        android:text="Add Custom Overlay"
+        android:textColor="@color/white"
+        android:textSize="20sp" />
+
+    <!-- Scrollable Options Container -->
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- Layer Name Input Layout -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilLayerName"
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Layer Name / Label">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etLayerName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"
+                    android:text="Main Marquee Ticker" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Type Selection Header -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Select Overlay Type"
+                android:textColor="@color/md_theme_dark_onSurfaceVariant"
+                android:textSize="13sp" />
+
+            <!-- Overlay Type Chips -->
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chipGroupType"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:singleSelection="true">
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipMarquee"
+                    style="@style/Widget.Material3.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:text="Scrolling Marquee" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipLogo"
+                    style="@style/Widget.Material3.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Image / Logo" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipText"
+                    style="@style/Widget.Material3.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Text Overlay" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipHtml"
+                    style="@style/Widget.Material3.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="HTML Overlay" />
+            </com.google.android.material.chip.ChipGroup>
+
+            <!-- Scroll Direction Section (For Scrolling Marquee) -->
+            <LinearLayout
+                android:id="@+id/layoutScrollOptions"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Scroll Direction"
+                    android:textColor="@color/md_theme_dark_onSurfaceVariant"
+                    android:textSize="13sp" />
+
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/chipGroupDirection"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    app:singleSelection="true">
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipScrollRightToLeft"
+                        style="@style/Widget.Material3.Chip.Filter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="true"
+                        android:text="Right ➔ Left" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipScrollLeftToRight"
+                        style="@style/Widget.Material3.Chip.Filter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Left ➔ Right" />
+                </com.google.android.material.chip.ChipGroup>
+
+                <TextView
+                    android:id="@+id/tvSpeedLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="Scroll Speed"
+                    android:textColor="@color/md_theme_dark_onSurfaceVariant"
+                    android:textSize="13sp" />
+
+                <com.google.android.material.slider.Slider
+                    android:id="@+id/sliderSpeed"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:stepSize="1.0"
+                    android:value="5.0"
+                    android:valueFrom="1.0"
+                    android:valueTo="20.0" />
+            </LinearLayout>
+
+            <!-- Animation Options (For Text / Image Logo) -->
+            <LinearLayout
+                android:id="@+id/layoutAnimationOptions"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Animation Effect"
+                    android:textColor="@color/md_theme_dark_onSurfaceVariant"
+                    android:textSize="13sp" />
+
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/chipGroupAnimation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    app:singleSelection="true">
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipAnimNone"
+                        style="@style/Widget.Material3.Chip.Filter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="true"
+                        android:text="None" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipAnimPulse"
+                        style="@style/Widget.Material3.Chip.Filter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Pulse" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipAnimFade"
+                        style="@style/Widget.Material3.Chip.Filter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Fade" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipAnimSpin"
+                        style="@style/Widget.Material3.Chip.Filter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Spin" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipAnimBounce"
+                        style="@style/Widget.Material3.Chip.Filter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Bounce" />
+                </com.google.android.material.chip.ChipGroup>
+            </LinearLayout>
+
+            <!-- Universal Layer Crop / Clipping Options (Available for ALL Overlay Types) -->
+            <LinearLayout
+                android:id="@+id/layoutUniversalCropOptions"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Layer Box Crop Margins (Clipping)"
+                    android:textColor="@color/md_theme_dark_onSurfaceVariant"
+                    android:textSize="13sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="Crop Left %"
+                    android:textColor="@color/md_theme_dark_onSurfaceVariant"
+                    android:textSize="11sp" />
+
+                <com.google.android.material.slider.Slider
+                    android:id="@+id/sliderCropLeft"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:stepSize="0.01"
+                    android:value="0.0"
+                    android:valueFrom="0.0"
+                    android:valueTo="0.45" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Crop Right %"
+                    android:textColor="@color/md_theme_dark_onSurfaceVariant"
+                    android:textSize="11sp" />
+
+                <com.google.android.material.slider.Slider
+                    android:id="@+id/sliderCropRight"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:stepSize="0.01"
+                    android:value="0.0"
+                    android:valueFrom="0.0"
+                    android:valueTo="0.45" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Crop Top %"
+                    android:textColor="@color/md_theme_dark_onSurfaceVariant"
+                    android:textSize="11sp" />
+
+                <com.google.android.material.slider.Slider
+                    android:id="@+id/sliderCropTop"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:stepSize="0.01"
+                    android:value="0.0"
+                    android:valueFrom="0.0"
+                    android:valueTo="0.45" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Crop Bottom %"
+                    android:textColor="@color/md_theme_dark_onSurfaceVariant"
+                    android:textSize="11sp" />
+
+                <com.google.android.material.slider.Slider
+                    android:id="@+id/sliderCropBottom"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:stepSize="0.01"
+                    android:value="0.0"
+                    android:valueFrom="0.0"
+                    android:valueTo="0.45" />
+            </LinearLayout>
+
+            <!-- Text Content Input Layout -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilText"
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:hint="Overlay Text Message">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etOverlayText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"
+                    android:text="★ GREYSTREAM LIVE - Welcome to the broadcast! ★" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- HTML Options Section -->
+            <LinearLayout
+                android:id="@+id/layoutHtmlSection"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilHtml"
+                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="HTML URL (https://...) or Raw Code Snippet">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etHtmlUrlOrCode"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textMultiLine"
+                        android:minLines="2"
+                        android:text="https://example.com" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.materialswitch.MaterialSwitch
+                    android:id="@+id/switchHtmlFullPage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="🖥️ Full Screen / Page Overlay"
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
+
+            <!-- Image Selection & Editing Section (For Logo) -->
+            <LinearLayout
+                android:id="@+id/layoutLogoOptions"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnOpenLogosLibrary"
+                    style="@style/Widget.Material3.Button.TonalButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="📁 Choose from Saved Logos Library"
+                    app:icon="@drawable/ic_layers" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnPickImage"
+                    style="@style/Widget.Material3.Button.OutlinedButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:text="🖼️ Pick New Image from Storage"
+                    app:icon="@drawable/ic_add" />
+
+                <!-- Logo Image Preview & Actions Card -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardImagePreview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:visibility="gone"
+                    app:cardBackgroundColor="#222733"
+                    app:cardCornerRadius="12dp"
+                    app:strokeColor="#33FFFFFF"
+                    app:strokeWidth="1dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="12dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Selected Logo Preview"
+                            android:textColor="@color/md_theme_dark_onSurfaceVariant"
+                            android:textSize="12sp" />
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="120dp"
+                            android:layout_marginTop="6dp"
+                            android:background="#15ffffff">
+
+                            <ImageView
+                                android:id="@+id/ivSelectedLogoPreview"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:scaleType="fitCenter" />
+                        </RelativeLayout>
+
+                        <!-- Image Modification Tool Buttons -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:orientation="horizontal">
+
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/btnCropImage"
+                                style="@style/Widget.Material3.Button.OutlinedButton"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="4dp"
+                                android:layout_weight="1"
+                                android:text="✂️ Custom Crop"
+                                android:textSize="11sp" />
+
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/btnRemoveBackground"
+                                style="@style/Widget.Material3.Button.OutlinedButton"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="4dp"
+                                android:layout_weight="1.2"
+                                android:text="🪄 Make BG Transparent"
+                                android:textSize="11sp" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+            </LinearLayout>
+
+            <!-- Total Layer Opacity Slider -->
+            <TextView
+                android:id="@+id/tvLayerAlphaLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Total Layer Opacity (Overall Transparency)"
+                android:textColor="@color/md_theme_dark_onSurfaceVariant"
+                android:textSize="13sp" />
+
+            <com.google.android.material.slider.Slider
+                android:id="@+id/sliderLayerAlpha"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:stepSize="0.05"
+                android:value="1.0"
+                android:valueFrom="0.05"
+                android:valueTo="1.0" />
+
+            <!-- Layer Background Style Header -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Layer Custom Background"
+                android:textColor="@color/md_theme_dark_onSurfaceVariant"
+                android:textSize="13sp" />
+
+            <!-- Background Type Chips -->
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chipGroupBgType"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:singleSelection="true">
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipBgNone"
+                    style="@style/Widget.Material3.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Transparent / None" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipBgColor"
+                    style="@style/Widget.Material3.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:text="Solid Colour" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipBgImage"
+                    style="@style/Widget.Material3.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Custom Image" />
+            </com.google.android.material.chip.ChipGroup>
+
+            <!-- Background Image Selection Button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnPickBgImage"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Choose Background Image"
+                android:visibility="gone"
+                app:icon="@drawable/ic_add" />
+
+            <!-- Background Opacity Slider -->
+            <TextView
+                android:id="@+id/tvBgAlphaLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="Background Colour / Image Opacity"
+                android:textColor="@color/md_theme_dark_onSurfaceVariant"
+                android:textSize="13sp" />
+
+            <com.google.android.material.slider.Slider
+                android:id="@+id/sliderBgAlpha"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:stepSize="0.05"
+                android:value="0.6"
+                android:valueFrom="0.0"
+                android:valueTo="1.0" />
+
+            <!-- Text Color Presets Row -->
+            <LinearLayout
+                android:id="@+id/layoutTextColorSection"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Text Color"
+                    android:textColor="@color/md_theme_dark_onSurfaceVariant"
+                    android:textSize="13sp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnColorWhite"
+                        style="@style/Widget.Material3.Button.IconButton"
+                        android:layout_width="44dp"
+                        android:layout_height="44dp"
+                        android:backgroundTint="@color/white" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnColorRed"
+                        style="@style/Widget.Material3.Button.IconButton"
+                        android:layout_width="44dp"
+                        android:layout_height="44dp"
+                        android:layout_marginStart="8dp"
+                        android:backgroundTint="@color/stream_live_red" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnColorYellow"
+                        style="@style/Widget.Material3.Button.IconButton"
+                        android:layout_width="44dp"
+                        android:layout_height="44dp"
+                        android:layout_marginStart="8dp"
+                        android:backgroundTint="#FFCC00" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnColorCyan"
+                        style="@style/Widget.Material3.Button.IconButton"
+                        android:layout_width="44dp"
+                        android:layout_height="44dp"
+                        android:layout_marginStart="8dp"
+                        android:backgroundTint="#00E5FF" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnColorPurple"
+                        style="@style/Widget.Material3.Button.IconButton"
+                        android:layout_width="44dp"
+                        android:layout_height="44dp"
+                        android:layout_marginStart="8dp"
+                        android:backgroundTint="@color/stream_accent" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Text Size / Scale Slider -->
+            <TextView
+                android:id="@+id/tvSizeLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Overlay Size / Scale"
+                android:textColor="@color/md_theme_dark_onSurfaceVariant"
+                android:textSize="13sp" />
+
+            <com.google.android.material.slider.Slider
+                android:id="@+id/sliderScale"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:stepSize="0.1"
+                android:value="1.0"
+                android:valueFrom="0.5"
+                android:valueTo="3.0" />
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <!-- Always Visible Sticky Footer Button -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnSaveOverlay"
+        style="@style/Widget.Material3.Button"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_marginTop="12dp"
+        android:text="Add Overlay to Stream"
+        app:cornerRadius="16dp" />
+
+</LinearLayout>

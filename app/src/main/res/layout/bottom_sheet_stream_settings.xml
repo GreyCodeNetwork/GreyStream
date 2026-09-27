@@ -1,0 +1,518 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/md_theme_dark_surface"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <!-- Drag Handle -->
+    <View
+        android:layout_width="32dp"
+        android:layout_height="4dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="16dp"
+        android:background="#44FFFFFF" />
+
+    <!-- Title -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-medium"
+        android:text="Advanced Stream Configuration"
+        android:textColor="@color/white"
+        android:textSize="20sp" />
+
+    <!-- Live Stream Active Lock Banner -->
+    <LinearLayout
+        android:id="@+id/layoutLiveLockBanner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:background="#33FF3B30"
+        android:orientation="horizontal"
+        android:padding="10dp"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="🔒 "
+            android:textSize="16sp" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Live Stream Active: Stream parameters are locked. Microphone gain &amp; Local recording can still be adjusted dynamically."
+            android:textColor="#FF6B6B"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- Stream Profile Selector Chips -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Stream Platform Preset"
+                android:textColor="@color/md_theme_dark_onSurfaceVariant"
+                android:textSize="13sp" />
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chipGroupProfile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:singleSelection="true">
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipYoutube"
+                    style="@style/Widget.Material3.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:text="@string/preset_youtube" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipTwitch"
+                    style="@style/Widget.Material3.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/preset_twitch" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipFacebook"
+                    style="@style/Widget.Material3.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/preset_facebook" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipCustom"
+                    style="@style/Widget.Material3.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/preset_custom" />
+            </com.google.android.material.chip.ChipGroup>
+
+            <!-- RTMP/RTMPS Server URL Input -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilServerUrl"
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:hint="@string/server_url">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etServerUrl"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textUri"
+                    android:text="rtmp://a.rtmp.youtube.com/live2" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Stream Key Input -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilStreamKey"
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:hint="@string/stream_key"
+                app:passwordToggleEnabled="true">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etStreamKey"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPassword"
+                    android:text="live_stream_key_demo" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Audio Source Selection (External Mic Option) -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Microphone / Audio Source Selection"
+                android:textColor="@color/md_theme_dark_onSurfaceVariant"
+                android:textSize="13sp" />
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chipGroupAudioSource"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:singleSelection="true">
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipAudioInternal"
+                    style="@style/Widget.Material3.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:text="🎙️ Internal Mic" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipAudioExternal"
+                    style="@style/Widget.Material3.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="🎧 External / Wired Mic" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipAudioBluetooth"
+                    style="@style/Widget.Material3.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="📶 Bluetooth Headset Mic" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipAudioUnprocessed"
+                    style="@style/Widget.Material3.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="🎛️ Raw / Unprocessed" />
+            </com.google.android.material.chip.ChipGroup>
+
+            <!-- Live Microphone Stereo Sound Level Indicator -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Live Microphone Level (L / R)"
+                android:textColor="@color/md_theme_dark_onSurfaceVariant"
+                android:textSize="13sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="16dp"
+                    android:layout_height="wrap_content"
+                    android:text="L"
+                    android:textColor="#88FFFFFF"
+                    android:textSize="11sp"
+                    android:textStyle="bold" />
+
+                <ProgressBar
+                    android:id="@+id/settingsAudioLevelBarL"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="0dp"
+                    android:layout_height="8dp"
+                    android:layout_weight="1"
+                    android:max="100"
+                    android:progress="0"
+                    android:progressDrawable="@drawable/bg_audio_level_bar" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="16dp"
+                    android:layout_height="wrap_content"
+                    android:text="R"
+                    android:textColor="#88FFFFFF"
+                    android:textSize="11sp"
+                    android:textStyle="bold" />
+
+                <ProgressBar
+                    android:id="@+id/settingsAudioLevelBarR"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="0dp"
+                    android:layout_height="8dp"
+                    android:layout_weight="1"
+                    android:max="100"
+                    android:progress="0"
+                    android:progressDrawable="@drawable/bg_audio_level_bar" />
+            </LinearLayout>
+
+            <!-- Input Audio Volume Boost Slider -->
+            <TextView
+                android:id="@+id/tvAudioGainLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="Input Microphone Gain: 100%"
+                android:textColor="@color/md_theme_dark_onSurfaceVariant"
+                android:textSize="13sp" />
+
+            <com.google.android.material.slider.Slider
+                android:id="@+id/sliderAudioGain"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:stepSize="10"
+                android:value="100"
+                android:valueFrom="0"
+                android:valueTo="300" />
+
+            <!-- Resolution Preset -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Video Resolution"
+                android:textColor="@color/md_theme_dark_onSurfaceVariant"
+                android:textSize="13sp" />
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chipGroupResolution"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:singleSelection="true">
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipResAuto"
+                    style="@style/Widget.Material3.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="⚡ Auto (Match Screen Aspect)" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip1080p"
+                    style="@style/Widget.Material3.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1080p (1920x1080)" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip720p"
+                    style="@style/Widget.Material3.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:text="720p (1280x720)" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip480p"
+                    style="@style/Widget.Material3.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="480p (854x480)" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipResCustom"
+                    style="@style/Widget.Material3.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="⚙️ Custom Resolution" />
+            </com.google.android.material.chip.ChipGroup>
+
+            <!-- Custom Resolution Input Layout -->
+            <LinearLayout
+                android:id="@+id/layoutCustomResolution"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilCustomWidth"
+                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="6dp"
+                    android:layout_weight="1"
+                    android:hint="Width (e.g. 1920)">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etCustomWidth"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="number"
+                        android:text="1920" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilCustomHeight"
+                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:layout_weight="1"
+                    android:hint="Height (e.g. 1080)">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etCustomHeight"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="number"
+                        android:text="1080" />
+                </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
+
+            <!-- Target Frame Rate FPS -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Frame Rate (FPS)"
+                android:textColor="@color/md_theme_dark_onSurfaceVariant"
+                android:textSize="13sp" />
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chipGroupFps"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:singleSelection="true">
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipFpsAuto"
+                    style="@style/Widget.Material3.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="⚡ Auto (Adaptive FPS)" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipFps30"
+                    style="@style/Widget.Material3.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:text="30 FPS (Standard)" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipFps60"
+                    style="@style/Widget.Material3.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="60 FPS (Smooth / Gaming)" />
+            </com.google.android.material.chip.ChipGroup>
+
+            <!-- Bitrate Control Slider -->
+            <TextView
+                android:id="@+id/tvBitrateLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Video Bitrate: 2500 Kbps"
+                android:textColor="@color/md_theme_dark_onSurfaceVariant"
+                android:textSize="13sp" />
+
+            <com.google.android.material.slider.Slider
+                android:id="@+id/sliderBitrate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:stepSize="250"
+                android:value="2500"
+                android:valueFrom="500"
+                android:valueTo="12000" />
+
+            <!-- Adaptive Bitrate Switch Option -->
+            <com.google.android.material.materialswitch.MaterialSwitch
+                android:id="@+id/switchAdaptiveBitrate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:checked="true"
+                android:text="🌐 Adaptive Bitrate (Auto-Adjust to Network)"
+                android:textColor="@color/white"
+                android:textSize="13sp" />
+
+            <!-- Keyframe Interval Slider -->
+            <TextView
+                android:id="@+id/tvGopLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="Keyframe Interval (GOP): 2 seconds"
+                android:textColor="@color/md_theme_dark_onSurfaceVariant"
+                android:textSize="13sp" />
+
+            <com.google.android.material.slider.Slider
+                android:id="@+id/sliderGop"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:stepSize="1"
+                android:value="2"
+                android:valueFrom="1"
+                android:valueTo="5" />
+
+            <!-- Aspect Ratio Mode -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Camera Aspect Ratio Display Mode"
+                android:textColor="@color/md_theme_dark_onSurfaceVariant"
+                android:textSize="13sp" />
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chipGroupAspectRatio"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:singleSelection="true">
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipAspectAdjust"
+                    style="@style/Widget.Material3.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:text="Fit / Adjust (No Crop)" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipAspectFill"
+                    style="@style/Widget.Material3.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Crop / Fill Screen" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipAspectNone"
+                    style="@style/Widget.Material3.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Stretch (Fill Bounds)" />
+            </com.google.android.material.chip.ChipGroup>
+
+            <!-- Record Locally Option -->
+            <com.google.android.material.materialswitch.MaterialSwitch
+                android:id="@+id/switchRecord"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="@string/record_local"
+                android:textColor="@color/white"
+                android:textSize="14sp" />
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <!-- Save Settings Button -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnSaveSettings"
+        style="@style/Widget.Material3.Button"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_marginTop="12dp"
+        android:text="Save Stream Configuration"
+        app:cornerRadius="16dp" />
+
+</LinearLayout>

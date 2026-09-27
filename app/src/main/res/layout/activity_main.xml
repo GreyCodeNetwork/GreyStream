@@ -1,0 +1,351 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainContainer"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black"
+    android:fitsSystemWindows="true"
+    tools:context=".MainActivity">
+
+    <!-- Camera Preview Container Matching Output Stream Aspect Ratio (16:9 / 9:16) -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/previewContainer"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintDimensionRatio="16:9"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <!-- OpenGL Camera Surface View -->
+        <com.pedro.library.view.OpenGlView
+            android:id="@+id/openGlView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:aspectRatioMode="fill" />
+
+        <!-- Interactive Drag-and-Drop Overlay Layer -->
+        <io.greycode.streamer.overlay.OverlayCanvasView
+            android:id="@+id/overlayCanvasView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- Top Status Header Bar -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/topBar"
+        style="@style/Widget.GreyStream.Card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="12dp"
+        app:cardBackgroundColor="#CC121316"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="8dp">
+
+            <!-- Primary Top Row: Status, Timer, Bitrate, Lock & Settings -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <!-- Connection Status Pill -->
+                <TextView
+                    android:id="@+id/tvStatusBadge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_live_pill"
+                    android:backgroundTint="@color/stream_offline_gray"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="@string/status_offline"
+                    android:textColor="@color/white"
+                    android:textSize="11sp" />
+
+                <!-- Stream Timer -->
+                <TextView
+                    android:id="@+id/tvStreamTimer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="00:00:00"
+                    android:textColor="@color/white"
+                    android:textSize="13sp" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
+                <!-- Bitrate Meter -->
+                <TextView
+                    android:id="@+id/tvBitrate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif"
+                    android:text="0 Kbps"
+                    android:textColor="#B0FFFFFF"
+                    android:textSize="12sp" />
+
+                <!-- Lock/Unlock Drag Layout Button -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnLockLayout"
+                    style="@style/Widget.Material3.Button.IconButton"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_marginStart="6dp"
+                    app:icon="@drawable/ic_lock_open"
+                    app:iconSize="18dp"
+                    app:iconTint="@color/white" />
+
+                <!-- Settings Button -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnSettings"
+                    style="@style/Widget.Material3.Button.IconButton"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_marginStart="2dp"
+                    app:icon="@drawable/ic_settings"
+                    app:iconSize="18dp"
+                    app:iconTint="@color/white" />
+            </LinearLayout>
+
+            <!-- Secondary Metrics Row: FPS & Live Microphone Sound Meters -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <!-- Real-time FPS Counter -->
+                <TextView
+                    android:id="@+id/tvFps"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="30 FPS"
+                    android:textColor="#00E5FF"
+                    android:textSize="11sp" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
+                <!-- Dynamic Dual Channel Stereo (L / R) Sound Bars -->
+                <ImageView
+                    android:id="@+id/ivAudioMeterIcon"
+                    android:layout_width="14dp"
+                    android:layout_height="14dp"
+                    android:layout_marginEnd="4dp"
+                    android:contentDescription="Audio Level"
+                    android:src="@drawable/ic_mic_on"
+                    app:tint="#00E676" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="vertical">
+
+                    <!-- Left Channel Sound Bar -->
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="L"
+                            android:textColor="#88FFFFFF"
+                            android:textSize="9sp" />
+                        <ProgressBar
+                            android:id="@+id/audioLevelBarL"
+                            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                            android:layout_width="56dp"
+                            android:layout_height="4dp"
+                            android:layout_marginStart="3dp"
+                            android:max="100"
+                            android:progress="0"
+                            android:progressDrawable="@drawable/bg_audio_level_bar" />
+                    </LinearLayout>
+
+                    <!-- Right Channel Sound Bar -->
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="R"
+                            android:textColor="#88FFFFFF"
+                            android:textSize="9sp" />
+                        <ProgressBar
+                            android:id="@+id/audioLevelBarR"
+                            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                            android:layout_width="56dp"
+                            android:layout_height="4dp"
+                            android:layout_marginStart="3dp"
+                            android:max="100"
+                            android:progress="0"
+                            android:progressDrawable="@drawable/bg_audio_level_bar" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Side Quick Camera Controls Bar -->
+    <LinearLayout
+        android:id="@+id/sideControls"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="12dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/bottomControlCard"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/topBar">
+
+        <!-- Flip Camera -->
+        <ImageButton
+            android:id="@+id/btnSwitchCamera"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/bg_control_button"
+            android:contentDescription="Switch Camera"
+            android:src="@drawable/ic_cam_switch" />
+
+        <!-- Toggle Flash -->
+        <ImageButton
+            android:id="@+id/btnToggleFlash"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/bg_control_button"
+            android:contentDescription="Toggle Flashlight"
+            android:src="@drawable/ic_flash_off" />
+
+        <!-- Mute Mic -->
+        <ImageButton
+            android:id="@+id/btnToggleMic"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/bg_control_button"
+            android:contentDescription="Toggle Microphone"
+            android:src="@drawable/ic_mic_on" />
+
+        <!-- Aspect Ratio Option -->
+        <ImageButton
+            android:id="@+id/btnAspectRatio"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/bg_control_button"
+            android:contentDescription="Change Aspect Ratio"
+            android:src="@drawable/ic_aspect_ratio" />
+
+        <!-- Lock Orientation Option -->
+        <ImageButton
+            android:id="@+id/btnLockOrientation"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:background="@drawable/bg_control_button"
+            android:contentDescription="Lock Orientation"
+            android:src="@drawable/ic_screen_rotation" />
+    </LinearLayout>
+
+    <!-- Bottom Responsive Streaming Control Bar -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/bottomControlCard"
+        style="@style/Widget.GreyStream.Card"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="12dp"
+        app:cardBackgroundColor="#D91A1C20"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="8dp"
+            android:paddingVertical="8dp">
+
+            <!-- Layers Manager Button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnOverlayLayers"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="0dp"
+                android:layout_height="44dp"
+                android:layout_weight="1.1"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:paddingHorizontal="4dp"
+                android:text="Layers"
+                android:textColor="@color/white"
+                android:textSize="12sp"
+                app:icon="@drawable/ic_layers"
+                app:iconPadding="4dp"
+                app:iconSize="18dp"
+                app:iconTint="@color/white"
+                app:strokeColor="#55FFFFFF" />
+
+            <!-- Add Overlay Button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnAddOverlay"
+                style="@style/Widget.Material3.Button.TonalButton"
+                android:layout_width="0dp"
+                android:layout_height="44dp"
+                android:layout_marginStart="6dp"
+                android:layout_weight="1.3"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:paddingHorizontal="4dp"
+                android:text="Add Overlay"
+                android:textSize="12sp"
+                app:icon="@drawable/ic_add"
+                app:iconPadding="4dp"
+                app:iconSize="18dp" />
+
+            <!-- GO LIVE / STOP STREAM Main Button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnGoLive"
+                style="@style/Widget.Material3.Button"
+                android:layout_width="0dp"
+                android:layout_height="46dp"
+                android:layout_marginStart="6dp"
+                android:layout_weight="1.4"
+                android:backgroundTint="@color/stream_live_red"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:paddingHorizontal="8dp"
+                android:text="@string/go_live"
+                android:textColor="@color/white"
+                android:textSize="13sp"
+                app:cornerRadius="23dp" />
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
